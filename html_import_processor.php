@@ -45,7 +45,7 @@
         $json = json_encode($object);
 
         // Refact code
-        // $ch = curl_init('/html-parser/HtmlProcessor.php');
+         $ch = curl_init($_SERVER['HTTP_HOST'] . '/HtmlProcessor.php');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
         curl_setopt($ch, CURLOPT_HEADER, 1);
