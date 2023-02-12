@@ -26,42 +26,42 @@
 
 <?php
 
-if (isset($_POST['url'])) {
-    $url = htmlentities($_POST['url']);
+    if (isset($_POST['url'])) {
+        $url = htmlentities($_POST['url']);
 
-    // Parsing page
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HEADER, 0);
-    curl_setopt($ch, CURLOPT_POST, 1);
-    if (curl_exec($ch) === false) {
-        echo 'Ошибка curl: ' . curl_error($ch);
-    }
-    $result = curl_exec($ch);
-    curl_close($ch);
-    $object = [
-        'raw_text' => $result,
-    ];
-    $json = json_encode($object);
+        // Parsing page
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        if (curl_exec($ch) === false) {
+            echo 'Ошибка curl: ' . curl_error($ch);
+        }
+        $result = curl_exec($ch);
+        curl_close($ch);
+        $object = [
+            'raw_text' => $result,
+        ];
+        $json = json_encode($object);
 
-    // Refact code
-    $ch = curl_init($_SERVER['HTTP_HOST'] . '/html-parser/HtmlProcessor.php');
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
-    curl_setopt($ch, CURLOPT_HEADER, 1);
-    curl_setopt($ch, CURLOPT_POST, 1);
-    if (curl_exec($ch) === false) {
-        echo 'Ошибка curl: ' . curl_error($ch);
-    }
-    $result = curl_exec($ch);
-    curl_close($ch);
-    if ($data = json_decode($result)) {
-        echo $data->formatted_text;
-    } else {
-        echo "Произошла ошибка";
-        http_response_code(500);
-        exit;
-    }
-}
+        // Refact code
+        // $ch = curl_init('/html-parser/HtmlProcessor.php');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+        curl_setopt($ch, CURLOPT_HEADER, 1);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        if (curl_exec($ch) === false) {
+            echo 'Ошибка curl: ' . curl_error($ch);
+        }
+        $result = curl_exec($ch);
+        curl_close($ch);
+        if ($object = json_decode($result)) {
+            echo $object->formatted_text;
+        } else {
+            echo "Произошла ошибка";
+            http_response_code(500);
+            exit;
+        }
 
+    }
 ?>
