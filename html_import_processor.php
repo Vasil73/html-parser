@@ -13,7 +13,7 @@
         <form method="POST">
             <div class="mb-5">
                 <label for="url" class="form-label">URL адрес</label>
-                <input type="url" name="url" class="form-control w-50" id="url" aria-describedby="emailHelp" placeholder="https://go.skillbox.ru/" value="<?= $_POST['url']??'' ?>" required>
+                <input type="url" name="url" class="form-control w-50" id="url" aria-describedby="emailHelp" placeholder="https://go.skillbox.ru/" value="<?= $_POST['url']??'' ?>"  required>
                 <div id="urlHelp" class="form-text">Введите url страницы</div>
             </div>
             <button type="submit" class="btn btn-primary">Выполнить</button>
@@ -33,6 +33,7 @@ if (isset($_POST['url'])) {
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HEADER, 0);
+    curl_setopt($ch, CURLOPT_POST, 1);
     if (curl_exec($ch) === false) {
         echo 'Ошибка curl: ' . curl_error($ch);
     }
@@ -47,7 +48,8 @@ if (isset($_POST['url'])) {
     $ch = curl_init($_SERVER['HTTP_HOST'] . '/html-parser/HtmlProcessor.php');
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
-    curl_setopt($ch, CURLOPT_HEADER, 0);
+    curl_setopt($ch, CURLOPT_HEADER, 1);
+    curl_setopt($ch, CURLOPT_POST, 1);
     if (curl_exec($ch) === false) {
         echo 'Ошибка curl: ' . curl_error($ch);
     }
@@ -56,8 +58,9 @@ if (isset($_POST['url'])) {
     if ($data = json_decode($result)) {
         echo $data->formatted_text;
     } else {
+        echo "Произошла ошибка";
         http_response_code(500);
-        echo "Произошла ошибка url";
+        exit;
     }
 }
 
