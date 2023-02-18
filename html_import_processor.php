@@ -46,7 +46,7 @@
         ];
         $json = json_encode($object);
 
-        $ch = curl_init( $_SERVER['HTTP_HOST'] . '../html-parser/HtmlProcessor.php');
+        $ch = curl_init( $_SERVER['HTTP_HOST'] . '/html-parser/HtmlProcessor.php');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
         curl_setopt($ch, CURLOPT_HEADER, 0);
